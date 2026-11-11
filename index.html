@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7e9f3">
+<title>Jason × Jenn | LDR Love Game</title>
+<style>
+:root{--pink:#ef8fba;--pink2:#ffe1ef;--purple:#7963a8;--ink:#34283d;--muted:#817589;--card:#fff;--bg:#fff8fc;--line:#f1dce9;--green:#4e9b78}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#ffe5f1,transparent 32%),radial-gradient(circle at 100% 10%,#eee6ff,transparent 30%),var(--bg);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);min-height:100vh}
+.wrap{max-width:980px;margin:auto;padding:20px 14px 44px}.hero{text-align:center;padding:22px 12px 16px}.eyebrow{font-size:12px;letter-spacing:3px;color:var(--purple);font-weight:800}.hero h1{font-size:clamp(28px,6vw,48px);margin:8px 0 4px;line-height:1.05}.hero p{margin:8px auto;color:var(--muted);max-width:560px}.heart{color:#e76ca8}
+.panel{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 12px 35px #8c527015;margin:14px 0}
+h2{font-size:19px;margin:0 0 12px}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+input,button,select{font:inherit;border-radius:13px;padding:12px 14px;border:1px solid var(--line)}input,select{width:100%;background:white;color:var(--ink)}
+button{border:0;background:var(--purple);color:white;font-weight:750;cursor:pointer;transition:.15s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.secondary{background:var(--pink2);color:#7b4264}.soft{background:#f3eef8;color:var(--purple)}.danger{background:#fce8ee;color:#a64267}
+.hidden{display:none!important}.hint{font-size:12px;color:var(--muted);line-height:1.5}.status{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;background:#f7edf5;border-radius:99px;padding:7px 11px;font-size:12px;font-weight:700;color:#76516d}
+.players{display:grid;grid-template-columns:1fr 1fr;gap:10px}.player{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fffafd}.player.active{outline:2px solid var(--pink);background:#fff4f9}.player strong{display:block;font-size:14px}.player .pos{font-size:24px;font-weight:850;color:var(--purple)}
+.board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}.cell{aspect-ratio:1;border-radius:12px;background:#f4eef7;border:1px solid #ebe1f0;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-width:0}.cell:nth-child(6n+1){background:#fff0f6}.cell .num{font-size:12px;font-weight:850;color:#6b5b73}.cell .mark{font-size:12px}.tokens{display:flex;gap:2px;font-size:15px;line-height:1.1}.cell.finish{background:#e4f4e9}.cell.ladder{background:#e6f4eb}.cell.snake{background:#ffebed}.cell.here{box-shadow:inset 0 0 0 2px var(--pink)}
+.controls{text-align:center}.dice{font-size:48px;margin:2px}.challenge{background:linear-gradient(135deg,#fff0f7,#f3efff);border:1px solid #f0d9e9;border-radius:18px;padding:18px;margin:12px 0}.challenge .type{font-size:11px;font-weight:900;letter-spacing:2px;color:var(--purple)}.challenge .prompt{font-size:19px;font-weight:750;line-height:1.4;margin:10px 0 14px}.small{font-size:12px;color:var(--muted)}.footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(max-width:520px){.wrap{padding:10px 10px 30px}.panel{padding:14px;border-radius:18px}.board{gap:4px}.cell{border-radius:8px}.cell .num{font-size:10px}.tokens{font-size:12px}.players{gap:7px}.player{padding:9px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero"><div class="eyebrow">A LITTLE GAME FOR TWO HEARTS</div><h1>Jason <span class="heart">♥</span> Jenn</h1><p>Walau jarak memisahkan, malam ini kalian tetap satu tim. Lempar dadu, temukan kejutan, dan kenali satu sama lain lebih dalam.</p></header>
+
+<section class="panel" id="setup">
+  <h2>💌 Mulai permainan</h2>
+  <p class="hint">Hubungkan game ke Firebase satu kali, lalu buat room. Pemain kedua cukup membuka alamat website yang sama dan memasukkan kode room.</p>
+  <div id="configBox">
+    <label class="small">Firebase Web Config (dari Firebase Console → Project settings → Your apps)</label>
+    <textarea id="firebaseConfig" rows="7" style="width:100%;margin:7px 0 10px;padding:12px;border:1px solid var(--line);border-radius:12px;font:12px ui-monospace,monospace">{
+  "apiKey": "AIzaSyCrf474tpVOyYwJEIh_FEZugX9qcaiX5B4",
+  "authDomain": "jason-jen-ldr-game.firebaseapp.com",
+  "databaseURL": "https://jason-jen-ldr-game-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "jason-jen-ldr-game",
+  "storageBucket": "jason-jen-ldr-game.firebasestorage.app",
+  "messagingSenderId": "860704184856",
+  "appId": "1:860704184856:web:869129c67864f30a66416d"
+}</textarea>
+    <button id="connectBtn" style="width:100%">Hubungkan game</button>
+    <p class="hint">Config web Firebase bukan password rahasia. Keamanan tetap diatur lewat Authentication dan Realtime Database Rules. Panduan lengkap ada di file README.</p>
+  </div>
+  <div id="roomBox" class="hidden">
+    <div class="row"><button id="createBtn">✨ Buat room baru</button><div><input id="joinCode" placeholder="Kode room, contoh JENN22"></div><button id="joinBtn" class="secondary">Gabung room</button></div>
+    <p id="setupMsg" class="hint" aria-live="polite"></p>
+  </div>
+</section>
+
+<main id="game" class="hidden">
+  <section class="panel">
+    <div class="status"><span class="pill" id="roomLabel">ROOM —</span><span id="connection">Menghubungkan…</span></div>
+    <div class="row" style="margin:12px 0">
+      <div class="player" id="player0"><strong>🧑 Jason</strong><div class="pos" id="pos0">0 / 30</div><span class="small" id="presence0">Menunggu pemain</span></div>
+      <div class="player" id="player1"><strong>💗 Jenn</strong><div class="pos" id="pos1">0 / 30</div><span class="small" id="presence1">Menunggu pemain</span></div>
+    </div>
+    <div class="board" id="board"></div>
+    <p class="hint">🪜 Tangga membantu naik · 🐍 Ular membuat turun · 🧑 Jason · 💗 Jenn</p>
+  </section>
+  <section class="panel controls">
+    <div class="pill" id="turnLabel">Menunggu giliran…</div>
+    <div class="dice" id="dice">🎲</div>
+    <div id="gameMessage" class="small">Buat room atau gabung dengan kode untuk mulai.</div>
+    <div id="rollArea"><button id="rollBtn" style="width:100%;margin-top:12px">LEMPAR DADU</button></div>
+    <div id="challengeArea" class="hidden">
+      <div class="challenge"><div class="type" id="challengeType">TRUTH</div><div class="prompt" id="challengePrompt"></div><div class="small">Boleh skip kalau tidak nyaman. Kejujuran lebih penting daripada menang.</div></div>
+      <div class="row"><button id="truthBtn" class="secondary">💬 Truth</button><button id="dareBtn">🔥 Dare</button></div>
+      <button id="doneBtn" style="width:100%;margin-top:10px">✓ Tantangan selesai</button>
+    </div>
+  </section>
+  <section class="panel">
+    <h2>🌷 Aturan kecil kita</h2>
+    <ul class="hint" style="padding-left:19px;line-height:1.8"><li>Giliran bergantian, satu lemparan dadu per giliran.</li><li>Setiap berhenti di kotak, pilih Truth atau Dare.</li><li>Kalau dapat ular atau tangga, posisi langsung berpindah.</li><li>Yang mencapai kotak 30 lebih dulu menang. Kalian tetap boleh lanjut ngobrol setelah game selesai.</li></ul>
+    <button id="copyBtn" class="soft" style="width:100%">Salin kode undangan</button>
+  </section>
+</main>
+<div class="footer">Dibuat dengan ♥ untuk Jason & Jenn · Private room LDR</div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, set, update, onValue, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const $=id=>document.getElementById(id);
+const ladders={3:11,8:15,14:24,20:28,26:30}, snakes={17:5,22:9,27:13,29:18};
+const truth=["Apa kesan pertamamu saat mengenalku?","Apa hal kecil dariku yang paling kamu sukai?","Kapan terakhir kali kamu kangen banget sama aku?","Apa ketakutan terbesarmu dalam hubungan kita?","Apa kebiasaan burukku yang sebenarnya kamu maklumi?","Kalau kita bertemu besok, apa hal pertama yang ingin kamu lakukan?","Apa momen chat kita yang paling kamu ingat?","Pernahkah kamu cemburu tapi memilih diam?","Apa satu hal yang ingin kamu perbaiki dari hubungan kita?","Apa yang membuatmu merasa paling disayang?","Apa impian yang ingin kamu capai bersamaku?","Apa hal yang belum pernah kamu ceritakan kepadaku?","Menurutmu, apa tantangan terbesar LDR kita?","Kapan kamu merasa paling dekat denganku meskipun berjauhan?","Apa tiga hal yang membuatmu jatuh hati?","Kalau sedang bertengkar, apa yang paling kamu butuhkan dariku?","Apa panggilan sayang favoritmu?","Apa satu janji yang ingin kamu pegang dalam hubungan ini?","Apa hal paling romantis yang pernah kamu bayangkan?","Seberapa serius kamu melihat masa depan kita?"];
+const dare=["Kirim voice note bilang 'aku kangen kamu' dengan suara paling manis.","Tatap kamera selama 15 detik tanpa tertawa.","Kirim selfie dengan ekspresi paling romantis.","Nyanyikan satu lagu cinta selama 20 detik.","Sebutkan 5 hal yang kamu sukai dari pasangan.","Buat pantun romantis secara spontan.","Kirim voice note berisi rayuan paling garing.","Tirukan cara pasangan tertawa.","Beri pasangan pujian selama 30 detik tanpa berhenti.","Kirim foto benda yang mengingatkanmu pada pasangan.","Buat nama panggilan baru untuk pasangan.","Ceritakan rencana kencan pertama kalian secara detail.","Ucapkan selamat malam paling romantis.","Kirim emoji yang menggambarkan perasaanmu sekarang dan jelaskan.","Lakukan dance lucu selama 10 detik.","Tatap kamera dan katakan tiga kalimat romantis.","Buat janji kecil yang bisa kamu tepati minggu ini.","Ceritakan satu hal yang ingin kamu lakukan saat bertemu.","Buat gombalan spontan tanpa berpikir lebih dari 5 detik.","Kirim voice note tertawa paling lepas."];
+let db,auth,uid,roomId,slot=-1,roomState,unsubscribe;
+function msg(s){$("setupMsg").textContent=s}
+function randCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function cellNumber(n){return n===0?"START":n}
+function renderBoard(state){
+ const b=$("board");b.innerHTML="";
+ // serpentine rows: bottom 1-6 left-to-right, next 7-12 right-to-left...
+ const nums=[];for(let row=4;row>=0;row--){let a=Array.from({length:6},(_,i)=>row*6+i+1);if((4-row)%2===1)a.reverse();nums.push(...a)}
+ nums.forEach(n=>{const el=document.createElement("div");el.className="cell"+(n===30?" finish":"")+(ladders[n]?" ladder":"")+(snakes[n]?" snake":"");let tokens=(state.players||[]).map((p,i)=>p.position===n?(i===0?"🧑":"💗"):"").join("");el.innerHTML=`<span class="num">${n}</span><span class="mark">${ladders[n]?"🪜":snakes[n]?"🐍":""}</span><span class="tokens">${tokens}</span>`;b.appendChild(el)})
+ $("pos0").textContent=(state.players?.[0]?.position||0)+" / 30";$("pos1").textContent=(state.players?.[1]?.position||0)+" / 30";
+ $("player0").classList.toggle("active",state.turn===0);$("player1").classList.toggle("active",state.turn===1);
+ $("presence0").textContent=state.players?.[0]?.uid?"Terhubung":"Menunggu";$("presence1").textContent=state.players?.[1]?.uid?"Terhubung":"Menunggu";
+ $("turnLabel").textContent=state.finished?`🏆 ${state.players[state.winner]?.name} menang!`:`Giliran ${state.players?.[state.turn]?.name||"—"}`;
+ $("dice").textContent=state.lastRoll?["⚀","⚁","⚂","⚃","⚄","⚅"][state.lastRoll-1]:"🎲";
+ $("gameMessage").textContent=state.message||"Giliran kalian.";
+ const myTurn=state.players?.[state.turn]?.uid===uid;
+ $("rollBtn").disabled=!myTurn||state.phase!=="roll"||!!state.finished||!state.players?.[1]?.uid;
+ $("rollArea").classList.toggle("hidden",state.phase!=="roll"||!!state.finished);
+ $("challengeArea").classList.toggle("hidden",(state.phase!=="challenge"&&state.phase!=="choose")||!!state.finished);
+ $("truthBtn").classList.toggle("hidden",state.phase!=="choose");$("dareBtn").classList.toggle("hidden",state.phase!=="choose");
+ $("doneBtn").classList.toggle("hidden",state.phase!=="challenge");
+ $("truthBtn").disabled=!myTurn||state.phase!=="choose";$("dareBtn").disabled=!myTurn||state.phase!=="choose";$("doneBtn").disabled=!myTurn||state.phase!=="challenge";
+ $("challengeType").textContent=state.phase==="choose"?"PILIH TRUTH ATAU DARE":(state.challengeType||"TRUTH");$("challengePrompt").textContent=state.challenge||"Pilih salah satu tantangan di bawah.";
+}
+async function connect(){
+ try{const cfg=JSON.parse($("firebaseConfig").value);if(!cfg.databaseURL)throw Error("Config harus menyertakan databaseURL.");const app=initializeApp(cfg);auth=getAuth(app);db=getDatabase(app);await signInAnonymously(auth);uid=auth.currentUser.uid;$("configBox").classList.add("hidden");$("roomBox").classList.remove("hidden");msg("Terhubung. Buat room atau masukkan kode dari pasangan.");$("connection").textContent="● Terhubung";}
+ catch(e){msg("Gagal menghubungkan: "+e.message)}
+}
+$("connectBtn").onclick=connect;
+async function createRoom(){
+ try{roomId=randCode();slot=0;const initial={createdAt:Date.now(),turn:0,phase:"roll",lastRoll:0,finished:false,winner:-1,message:"Room dibuat. Bagikan kode ini ke Jenn.",players:[{uid,name:"Jason",position:0},{uid:"",name:"Jenn",position:0}]};await set(ref(db,"rooms/"+roomId),initial);await enterRoom();}catch(e){msg("Tidak bisa membuat room: "+e.message)}
+}
+async function joinRoom(){
+ try{roomId=$("joinCode").value.trim().toUpperCase();if(!roomId)throw Error("Masukkan kode room.");const r=ref(db,"rooms/"+roomId);const snap=await get(r);if(!snap.exists())throw Error("Room tidak ditemukan.");const s=snap.val();if(s.players?.[0]?.uid===uid)slot=0;else if(s.players?.[1]?.uid===uid)slot=1;else if(!s.players?.[1]?.uid){slot=1;await update(r,{"players/1/uid":uid});}else throw Error("Room sudah penuh.");await enterRoom();}catch(e){msg(e.message)}
+}
+async function enterRoom(){
+ $("setup").classList.add("hidden");$("game").classList.remove("hidden");$("roomLabel").textContent="ROOM "+roomId;
+ $("copyBtn").onclick=async()=>{await navigator.clipboard.writeText(roomId);$("copyBtn").textContent="Kode tersalin ✓"};
+ if(unsubscribe)unsubscribe();unsubscribe=onValue(ref(db,"rooms/"+roomId),snap=>{if(snap.exists()){roomState=snap.val();renderBoard(roomState)}});
+}
+$("createBtn").onclick=createRoom;$("joinBtn").onclick=joinRoom;
+async function mutate(fn){const r=ref(db,"rooms/"+roomId);await runTransaction(r,s=>{if(!s)return s;return fn(s)})}
+$("rollBtn").onclick=async()=>{await mutate(s=>{if(s.turn!==slot||s.phase!=="roll"||!s.players[1].uid||s.finished)return s;const d=Math.floor(Math.random()*6)+1;const old=s.players[slot].position;const raw=Math.min(30,old+d);const dest=ladders[raw]||snakes[raw]||raw;s.players[slot].position=dest;s.lastRoll=d;s.phase="choose";s.pendingRaw=raw;s.message=`${s.players[slot].name} mendapat ${d}. Berhenti di kotak ${raw}${dest!==raw?` lalu berpindah ke ${dest}.`:"."}`;return s})};
+async function pick(type){const bank=type==="Truth"?truth:dare;const prompt=bank[Math.floor(Math.random()*bank.length)];await mutate(s=>{if(s.turn!==slot||s.phase!=="choose")return s;s.phase="challenge";s.challengeType=type.toUpperCase();s.challenge=prompt;s.message=`${s.players[slot].name}, waktunya ${type}!`;return s})}
+$("truthBtn").onclick=()=>pick("Truth");$("dareBtn").onclick=()=>pick("Dare");
+$("doneBtn").onclick=async()=>{await mutate(s=>{if(s.turn!==slot||s.phase!=="challenge")return s;if(s.players[slot].position>=30){s.finished=true;s.winner=slot;s.message="Selamat! Pemenang boleh meminta satu hadiah romantis yang disepakati bersama."}else{s.turn=1-s.turn;s.phase="roll";s.challenge="";s.challengeType="";s.message="Tantangan selesai. Giliran berikutnya!"}return s})};
+</script>
+</body></html>
