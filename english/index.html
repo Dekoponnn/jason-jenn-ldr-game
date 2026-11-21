@@ -14,7 +14,7 @@ button,input,select,textarea{font:inherit;border-radius:13px;padding:12px 14px;b
 .pill{display:inline-flex;border-radius:99px;padding:6px 10px;background:#3a3456;color:#e7defe;font-size:11px;font-weight:800;align-items:center;gap:5px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#19172d;border:1px solid var(--line);padding:11px;border-radius:14px;text-align:center}.stat b{display:block;font-size:20px;color:var(--gold)}.stat small{font-size:11px;color:var(--muted)}
 .tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 10px}.tabs button{white-space:nowrap;padding:10px 13px}.tabs button.active{background:var(--gold);color:#332642}
 .world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.world{border:1px solid var(--line);border-radius:16px;padding:13px;background:#1d1a32;text-align:left}.world.locked{opacity:.55}.world strong{display:block;margin:5px 0}.world .progress{height:6px;background:#403958;border-radius:10px;overflow:hidden;margin:9px 0}.world .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--gold))}
-.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.stage{background:#1b1930;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;min-height:62px}.stage b{display:block;font-size:14px}.stage small{color:var(--gold);font-size:10px}.stage.locked{opacity:.35}.stage.done{border-color:#8fe0c0}.stage button{width:100%;padding:8px 2px;background:transparent;color:var(--ink)}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.stage{touch-action:manipulation;pointer-events:auto;background:#1b1930;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;min-height:62px}.stage b{display:block;font-size:14px}.stage small{color:var(--gold);font-size:10px}.stage.locked{opacity:.35}.stage.done{border-color:#8fe0c0}.stage button{width:100%;padding:8px 2px;background:transparent;color:var(--ink)}
 .mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.mode{padding:13px;border-radius:15px;background:#1b1930;border:1px solid var(--line);cursor:pointer}.mode.selected{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}.mode .emoji{font-size:24px}.mode strong{display:block;margin:5px 0}.mode small{color:var(--muted);font-size:11px}
 .question{font-size:clamp(19px,4vw,26px);font-weight:850;line-height:1.35;margin:16px 0}.answers{display:grid;gap:9px}.answer{width:100%;text-align:left;background:#373151;border:1px solid #51486f;color:var(--ink);padding:13px}.answer.correct{background:#245440;border-color:var(--mint)}.answer.wrong{background:#5a2e45;border-color:var(--pink)}
 .feedback{border-radius:14px;padding:13px;margin:12px 0;background:#1b1930;border:1px solid var(--line);line-height:1.5}.feedback.good{border-color:#5ca987}.feedback.bad{border-color:#b45b81}
@@ -140,7 +140,21 @@ function renderWorlds(){
  const root=$("worldGrid");root.innerHTML="";
  worlds.forEach((w,i)=>{const n=worldDone(i),open=worldUnlock(i),el=document.createElement("button");el.className="world"+(open?"":" locked");el.disabled=!open;el.innerHTML=`<span class="pill">WORLD ${String(i+1).padStart(2,"0")} · ${w[2]}</span><strong>${["🌿","🌊","✨","🌀","⏳","🌧️","📜","⌛","🚀","🧭","☁️","🏁","🛡️","❓","🧩","💠","🔄","🪄","🗣️","👑"][i]} ${w[0]}</strong><small class="muted">${w[1]}</small><div class="progress"><span style="width:${n/50*100}%"></span></div><small>${n}/50 stage selesai ${open?"":"· Selesaikan 40 stage world sebelumnya"}</small>`;el.onclick=()=>openWorld(i);root.appendChild(el)});
 }
-function openWorld(i){selectedWorld=i;$("worldLabel").textContent="WORLD "+(i+1);$("worldTitle").textContent=worlds[i][0];$("worldDesc").textContent=worlds[i][1]+" · Formula: "+worlds[i][3];const root=$("stageGrid");root.innerHTML="";for(let s=1;s<=50;s++){const unlocked=stageUnlock(i,s),done=!!profile.completed[stageKey(i,s)],b=document.createElement("button");b.className="stage"+(unlocked?"":" locked")+(done?" done":"");b.disabled=!unlocked;b.innerHTML=`<b>${s}</b><small>${done?"★ "+profile.completed[stageKey(i,s)].stars+" ★":unlocked?"PLAY":"🔒"}</small>`;b.onclick=()=>startStage(i,s,false);root.appendChild(b)}showOnly("stageView")}
+function openWorld(i){
+ selectedWorld=i;$("worldLabel").textContent="WORLD "+(i+1);$("worldTitle").textContent=worlds[i][0];$("worldDesc").textContent=worlds[i][1]+" · Formula: "+worlds[i][3];
+ const root=$("stageGrid");root.innerHTML="";
+ for(let s=1;s<=50;s++){
+  const unlocked=stageUnlock(i,s),done=!!profile.completed[stageKey(i,s)],b=document.createElement("button");
+  b.type="button";b.className="stage"+(unlocked?"":" locked")+(done?" done":"");b.disabled=!unlocked;
+  b.innerHTML=`<b>${s}</b><small>${done?"★ "+profile.completed[stageKey(i,s)].stars+" ★":unlocked?"PLAY":"🔒"}</small>`;
+  b.addEventListener("click",()=>{
+   if(!unlocked)return;
+   try{startStage(i,s,false)}catch(err){console.error("Stage launch error",err);alert("Stage gagal dibuka: "+(err?.message||err));}
+  });
+  root.appendChild(b);
+ }
+ showOnly("stageView");
+}
 function pickMode(w,s){return (w*7+s*3)%8}
 function difficultyFor(w,s){if(w<2)return s<20?"Beginner":"Elementary";if(w<6)return s<15?"Beginner":s<38?"Elementary":"Intermediate";if(w<12)return s<12?"Elementary":s<35?"Intermediate":"Advanced";return s<12?"Elementary":s<32?"Intermediate":"Advanced"}
 const qbank={
@@ -224,7 +238,13 @@ function startStage(w,s,replay=false){
 function renderQuestion(){
  const q=play.questions[play.index];play.answered=false;$("questionCount").textContent=(play.index+1)+" / 5";$("questionProgress").style.width=(play.index/5*100)+"%";$("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");$("finishBtn").classList.add("hidden");
  const root=$("questionArea");root.innerHTML=`<div class="question">${q.prompt}</div>`;
- if(q.kind==="builder"){const shuffled=shuffle(q.words);root.innerHTML+=`<div class="badge-row" id="wordTiles"></div><p class="hint">Ketik susunan kalimatmu di bawah (gunakan semua kata).</p><input id="freeAnswer" placeholder="Type your sentence here"><button id="checkFree" style="width:100%;margin-top:9px">Periksa jawaban</button>`;const tiles=$("wordTiles");shuffled.forEach(x=>{const s=document.createElement("span");s.className="pill";s.textContent=x;tiles.appendChild(s)});$("checkFree").onclick=()=>checkFree($("freeAnswer").value.trim(),q.answer,q.explain)}
+ if(q.kind==="builder"){
+  const shuffled=shuffle(q.words);root.innerHTML+=`<p class="hint">Ketuk kata sesuai urutan untuk membentuk kalimat. Ketuk kata di jawaban untuk menghapusnya.</p><div class="badge-row" id="wordTiles"></div><div class="feedback" id="builtSentence" style="min-height:54px">Jawabanmu akan muncul di sini.</div><div class="row"><button type="button" class="secondary" id="clearBuild">Ulangi</button><button type="button" id="checkFree">Periksa jawaban</button></div>`;
+  const tiles=$("wordTiles"),built=$("builtSentence");let chosen=[];
+  function drawBuild(){built.innerHTML="";if(!chosen.length){built.textContent="Jawabanmu akan muncul di sini.";return;}chosen.forEach((word,index)=>{const chip=document.createElement("button");chip.type="button";chip.className="pill";chip.textContent=word;chip.style.margin="3px";chip.onclick=()=>{chosen.splice(index,1);drawBuild()};built.appendChild(chip)})}
+  shuffled.forEach((word)=>{const chip=document.createElement("button");chip.type="button";chip.className="pill";chip.textContent=word;chip.style.margin="3px";chip.onclick=()=>{chosen.push(word);drawBuild()};tiles.appendChild(chip)});
+  $("clearBuild").onclick=()=>{chosen=[];drawBuild()};$("checkFree").onclick=()=>checkFree(chosen.join(" "),q.answer,q.explain);
+ }
  else if(q.kind==="speak"){root.innerHTML+=`<textarea id="speakAnswer" rows="3" placeholder="Tulis jawabanmu di sini (opsional), lalu ucapkan lewat call..."></textarea><div class="row" style="margin-top:9px"><button id="selfGood" class="gold">✓ I tried it!</button><button id="askPartner" class="secondary">Pasangan sudah menilai</button></div><p class="hint">Penilaian jujur dan suportif: berani bicara, pesan jelas, grammar cukup tepat. Jangan mempermalukan pasangan karena salah.</p>`;$("selfGood").onclick=()=>markSpeak(true);$("askPartner").onclick=()=>markSpeak(true)}
  else{const opts=q.options.map((o,i)=>`<button class="answer" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join("");root.innerHTML+=`<div class="answers">${opts}</div>`;root.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answer(Number(b.dataset.i),q))}
 }
