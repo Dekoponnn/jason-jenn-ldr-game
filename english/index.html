@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#211d3a">
+<title>English Adventure | Jason × Jenn</title>
+<style>
+:root{--bg:#17152a;--panel:#24213d;--panel2:#302b50;--ink:#f8f5ff;--muted:#b9b2d2;--gold:#ffd477;--pink:#ff8db8;--mint:#8fe0c0;--line:#494264;--blue:#91baff;--red:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#42345f 0,transparent 32%),radial-gradient(circle at 100% 20%,#382b55 0,transparent 30%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.wrap{max-width:1050px;margin:auto;padding:16px 14px 42px}.hero{text-align:center;padding:22px 10px 18px}.eyebrow{letter-spacing:3px;font-size:11px;color:var(--gold);font-weight:900}.hero h1{font-size:clamp(30px,7vw,52px);line-height:1;margin:9px 0}.hero h1 span{color:var(--pink)}.hero p{color:var(--muted);margin:10px auto;max-width:650px}
+.panel{background:linear-gradient(145deg,#292542,#211e38);border:1px solid var(--line);border-radius:22px;padding:18px;margin:13px 0;box-shadow:0 14px 36px #09081755}
+h2{font-size:19px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.muted,.hint{color:var(--muted)}.hint{font-size:12px;line-height:1.55}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:130px}
+button,input,select,textarea{font:inherit;border-radius:13px;padding:12px 14px;border:1px solid var(--line)}input,select,textarea{width:100%;background:#19172d;color:var(--ink)}button{border:0;background:linear-gradient(135deg,#8668c7,#654e9f);color:white;font-weight:800;cursor:pointer}button.secondary{background:#42395e;border:1px solid #655985}button.gold{background:linear-gradient(135deg,#ffd477,#e8a943);color:#322440}button.pink{background:linear-gradient(135deg,#ff9cc2,#df669d)}button:disabled{opacity:.4;cursor:not-allowed}.hidden{display:none!important}
+.pill{display:inline-flex;border-radius:99px;padding:6px 10px;background:#3a3456;color:#e7defe;font-size:11px;font-weight:800;align-items:center;gap:5px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#19172d;border:1px solid var(--line);padding:11px;border-radius:14px;text-align:center}.stat b{display:block;font-size:20px;color:var(--gold)}.stat small{font-size:11px;color:var(--muted)}
+.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 10px}.tabs button{white-space:nowrap;padding:10px 13px}.tabs button.active{background:var(--gold);color:#332642}
+.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.world{border:1px solid var(--line);border-radius:16px;padding:13px;background:#1d1a32;text-align:left}.world.locked{opacity:.55}.world strong{display:block;margin:5px 0}.world .progress{height:6px;background:#403958;border-radius:10px;overflow:hidden;margin:9px 0}.world .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--gold))}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.stage{background:#1b1930;border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;min-height:62px}.stage b{display:block;font-size:14px}.stage small{color:var(--gold);font-size:10px}.stage.locked{opacity:.35}.stage.done{border-color:#8fe0c0}.stage button{width:100%;padding:8px 2px;background:transparent;color:var(--ink)}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.mode{padding:13px;border-radius:15px;background:#1b1930;border:1px solid var(--line);cursor:pointer}.mode.selected{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}.mode .emoji{font-size:24px}.mode strong{display:block;margin:5px 0}.mode small{color:var(--muted);font-size:11px}
+.question{font-size:clamp(19px,4vw,26px);font-weight:850;line-height:1.35;margin:16px 0}.answers{display:grid;gap:9px}.answer{width:100%;text-align:left;background:#373151;border:1px solid #51486f;color:var(--ink);padding:13px}.answer.correct{background:#245440;border-color:var(--mint)}.answer.wrong{background:#5a2e45;border-color:var(--pink)}
+.feedback{border-radius:14px;padding:13px;margin:12px 0;background:#1b1930;border:1px solid var(--line);line-height:1.5}.feedback.good{border-color:#5ca987}.feedback.bad{border-color:#b45b81}
+.bar{height:8px;background:#17152a;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--gold))}
+.achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:9px}.achievement{padding:12px;background:#1b1930;border:1px solid var(--line);border-radius:14px}.achievement.unlocked{border-color:var(--gold)}.achievement b{display:block}.achievement small{color:var(--muted)}
+.badge-row{display:flex;gap:6px;flex-wrap:wrap}.footer{text-align:center;color:var(--muted);font-size:11px;padding:18px}
+@media(max-width:560px){.wrap{padding:8px 9px 30px}.panel{padding:14px;border-radius:18px}.stats{grid-template-columns:repeat(2,1fr)}.stage-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.hero{padding-top:15px}.hero p{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="eyebrow">A TWO-PLAYER LEARNING QUEST</div>
+ <h1>ENGLISH <span>ADVENTURE</span></h1>
+ <p>Jason × Jenn · Learn together, laugh together, level up together.</p>
+ <div class="badge-row" style="justify-content:center"><span class="pill">⚔️ Multiplayer</span><span class="pill">🏆 1,000+ stages</span><span class="pill">💗 Couple missions</span></div>
+</header>
+
+<section class="panel" id="setup">
+ <h2>🌙 Masuk ke petualangan</h2>
+ <p class="hint">Hubungkan ke Firebase, lalu buat room atau gabung dengan kode. Kalian berdua bermain dari HP masing-masing.</p>
+ <label class="hint">Nama pemain</label><input id="playerName" maxlength="18" placeholder="Jason atau Jenn" value="Jason" style="margin:5px 0 10px">
+ <details><summary class="hint">Pengaturan koneksi Firebase</summary><textarea id="firebaseConfig" rows="7" spellcheck="false" style="margin-top:8px">{
+  "apiKey": "AIzaSyCrf474tpVOyYwJEIh_FEZugX9qcaiX5B4",
+  "authDomain": "jason-jen-ldr-game.firebaseapp.com",
+  "databaseURL": "https://jason-jen-ldr-game-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "jason-jen-ldr-game",
+  "storageBucket": "jason-jen-ldr-game.firebasestorage.app",
+  "messagingSenderId": "860704184856",
+  "appId": "1:860704184856:web:869129c67864f30a66416d"
+}</textarea></details>
+ <button id="connectBtn" style="width:100%;margin-top:10px">Hubungkan game</button>
+ <div id="roomBox" class="hidden" style="margin-top:12px">
+  <div class="row"><button id="createBtn" class="gold">✨ Buat room</button><div><input id="joinCode" placeholder="Kode room"></div><button id="joinBtn" class="secondary">Gabung</button></div>
+ </div>
+ <p id="setupMsg" class="hint" aria-live="polite"></p>
+</section>
+
+<main id="app" class="hidden">
+ <section class="panel">
+  <div class="row" style="align-items:center"><div><span class="pill" id="roomLabel">ROOM —</span><h2 style="margin:8px 0 0">Welcome, <span id="welcomeName">Player</span> ✨</h2></div><div style="text-align:right"><span class="pill" id="onlineLabel">Menunggu pemain</span><p class="hint" id="turnHint">Room siap</p></div></div>
+  <div class="stats" style="margin-top:14px">
+   <div class="stat"><b id="xp">0</b><small>XP kamu</small></div><div class="stat"><b id="level">1</b><small>Player level</small></div><div class="stat"><b id="stars">0</b><small>Stars</small></div><div class="stat"><b id="streak">0</b><small>Best streak</small></div>
+  </div>
+  <div class="row" style="margin-top:12px"><button class="secondary" id="homeBtn">🗺️ Adventure map</button><button class="secondary" id="achBtn">🏆 Achievements</button><button class="secondary" id="profileBtn">📊 Progress</button></div>
+ </section>
+
+ <section class="panel" id="mapView">
+  <h2>🗺️ Choose your world</h2><p class="hint">20 dunia · 50 stage per dunia · 1.000 stage utama. Selesaikan stage untuk membuka stage berikutnya. Stage yang sudah terbuka bisa diulang.</p>
+  <div id="worldGrid" class="world-grid"></div>
+ </section>
+
+ <section class="panel hidden" id="stageView">
+  <div class="row" style="align-items:center"><div><span class="pill" id="worldLabel">WORLD 1</span><h2 id="worldTitle" style="margin:7px 0">Stage</h2></div><button class="secondary" id="backWorld">← Kembali</button></div>
+  <p class="hint" id="worldDesc"></p><div class="stage-grid" id="stageGrid"></div>
+ </section>
+
+ <section class="panel hidden" id="playView">
+  <div class="row" style="align-items:center"><div><span class="pill" id="stageTag">WORLD 1 · STAGE 1</span><h2 id="playTitle" style="margin:7px 0">Challenge</h2></div><button class="secondary" id="exitPlay">Keluar</button></div>
+  <div class="row"><span class="pill" id="modeLabel">QUIZ</span><span class="pill" id="difficultyLabel">BEGINNER</span><span class="pill" id="questionCount">1 / 5</span></div>
+  <div class="bar" style="margin:12px 0"><span id="questionProgress" style="width:0%"></span></div>
+  <div id="learnBox" class="feedback hidden"></div>
+  <div id="questionArea"></div>
+  <div id="feedback" class="feedback hidden"></div>
+  <div class="row" style="margin-top:12px"><button id="nextBtn" class="gold hidden">Lanjut →</button><button id="finishBtn" class="pink hidden">Selesaikan stage</button></div>
+ </section>
+
+ <section class="panel hidden" id="achievementView">
+  <div class="row"><h2>🏆 Achievement Hall</h2><button class="secondary" id="backAch">Kembali</button></div><div id="achievementGrid" class="achievement-grid"></div>
+ </section>
+ <section class="panel hidden" id="profileView">
+  <div class="row"><h2>📊 Couple progress</h2><button class="secondary" id="backProfile">Kembali</button></div><div id="profileContent"></div>
+ </section>
+</main>
+<div class="footer">Made with ♥ for Jason & Jenn · English Adventure v1.0 · Your journey keeps growing.</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, set, update, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const $=id=>document.getElementById(id);
+const worlds=[
+["Present Simple","Kebiasaan, fakta, rutinitas dan jadwal.","Beginner","do/does · verb+s"],
+["Present Continuous","Aktivitas yang sedang berlangsung dan rencana dekat.","Beginner","am/is/are + verb-ing"],
+["Present Perfect","Pengalaman dan kejadian yang berdampak sekarang.","Elementary","have/has + V3"],
+["Present Perfect Continuous","Aktivitas yang dimulai di masa lalu dan masih berlangsung.","Intermediate","have/has been + verb-ing"],
+["Past Simple","Kejadian yang selesai di masa lalu.","Beginner","verb 2 · did"],
+["Past Continuous","Aktivitas yang sedang terjadi pada waktu lampau.","Elementary","was/were + verb-ing"],
+["Past Perfect","Kejadian yang selesai sebelum kejadian lampau lain.","Intermediate","had + V3"],
+["Past Perfect Continuous","Durasi aktivitas sebelum titik waktu lampau.","Advanced","had been + verb-ing"],
+["Future Simple","Prediksi, keputusan spontan, dan janji.","Beginner","will + verb"],
+["Be Going To","Rencana dan prediksi berdasarkan bukti.","Beginner","am/is/are going to"],
+["Future Continuous","Aktivitas yang akan sedang berlangsung.","Intermediate","will be + verb-ing"],
+["Future Perfect","Sesuatu yang akan selesai sebelum waktu tertentu.","Advanced","will have + V3"],
+["Modal Verbs","Can, could, should, must, may, might, have to.","Elementary","modal + base verb"],
+["Questions & Negation","Membuat pertanyaan dan kalimat negatif.","Beginner","do/does/did · be"],
+["Articles & Prepositions","A/an/the dan preposisi tempat/waktu.","Elementary","articles · in/on/at"],
+["Comparatives & Adjectives","Membandingkan orang, benda, dan keadaan.","Elementary","-er / more / the most"],
+["Passive Voice","Fokus pada tindakan dan penerima tindakan.","Intermediate","be + past participle"],
+["Conditionals","Kemungkinan, fakta umum, dan situasi hipotetis.","Intermediate","if clauses"],
+["Reported Speech","Menyampaikan kembali ucapan orang lain.","Advanced","tense backshift"],
+["Mixed Tenses Master","Campuran seluruh materi dari beginner sampai advanced.","Advanced","grammar mastery"]
+];
+const modeNames=["Grammar Quiz","Sentence Builder","Error Detective","Vocabulary Match","Conversation Quest","Speaking Challenge","Couple Mission","Lightning Battle"];
+const modeIcons=["🧠","🧩","🔎","📚","💬","🎙️","💗","⚡"];
+const modeInfo=["Pilih struktur kalimat yang tepat.","Susun kata menjadi kalimat benar.","Temukan dan perbaiki kesalahan.","Pilih kata yang cocok dengan arti/konteks.","Pilih respons yang natural dalam situasi.","Buat jawaban sendiri lalu ucapkan.","Kerjakan misi bersama pasangan.","Balapan menjawab dengan cepat."];
+const achievements=[
+["first","🌱 First Steps","Selesaikan stage pertama."],["ten","🧭 Explorer","Selesaikan 10 stage."],["fifty","🗺️ Adventurer","Selesaikan 50 stage."],["hundred","🏅 Century Club","Selesaikan 100 stage."],["perfect","💎 Perfect Stage","Dapatkan 3 bintang."],["streak5","🔥 On Fire","Raih 5 jawaban benar beruntun."],["streak10","⚡ Unstoppable","Raih 10 jawaban benar beruntun."],["couple","💗 Teamwork","Selesaikan misi couple."],["replay","🔁 Practice Makes Progress","Mainkan ulang stage."],["world","👑 World Conqueror","Selesaikan seluruh 50 stage dalam satu world."],["night","🌙 Night Owls","Belajar pada malam hari."],["xp1000","✨ XP Collector","Kumpulkan 1.000 XP."]
+];
+let app,db,uid,roomId,slot=-1,roomUnsub,roomState,profile={xp:0,level:1,stars:0,streak:0,bestStreak:0,completed:{},achievements:{},totalCorrect:0,totalPlayed:0},selectedWorld=0,currentStage=1,play=null,selectedMode=0;
+const roomPath=()=>ref(db,"englishAdventureRooms/"+roomId);
+const myProfilePath=()=>ref(db,"englishAdventureProfiles/"+uid);
+const randCode=()=>Math.random().toString(36).slice(2,8).toUpperCase();
+function say(t){$("setupMsg").textContent=t}
+function showOnly(id){["mapView","stageView","playView","achievementView","profileView"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function stageKey(w,s){return "w"+(w+1)+"s"+s}
+function worldUnlock(w){if(w===0)return true;return Object.keys(profile.completed||{}).filter(k=>k.startsWith("w"+w+"s")).length>=40}
+function stageUnlock(w,s){if(s===1)return worldUnlock(w);return !!profile.completed[stageKey(w,s-1)]}
+function worldDone(w){return Object.keys(profile.completed||{}).filter(k=>k.startsWith("w"+(w+1)+"s")).length}
+function renderWorlds(){
+ const root=$("worldGrid");root.innerHTML="";
+ worlds.forEach((w,i)=>{const n=worldDone(i),open=worldUnlock(i),el=document.createElement("button");el.className="world"+(open?"":" locked");el.disabled=!open;el.innerHTML=`<span class="pill">WORLD ${String(i+1).padStart(2,"0")} · ${w[2]}</span><strong>${["🌿","🌊","✨","🌀","⏳","🌧️","📜","⌛","🚀","🧭","☁️","🏁","🛡️","❓","🧩","💠","🔄","🪄","🗣️","👑"][i]} ${w[0]}</strong><small class="muted">${w[1]}</small><div class="progress"><span style="width:${n/50*100}%"></span></div><small>${n}/50 stage selesai ${open?"":"· Selesaikan 40 stage world sebelumnya"}</small>`;el.onclick=()=>openWorld(i);root.appendChild(el)});
+}
+function openWorld(i){selectedWorld=i;$("worldLabel").textContent="WORLD "+(i+1);$("worldTitle").textContent=worlds[i][0];$("worldDesc").textContent=worlds[i][1]+" · Formula: "+worlds[i][3];const root=$("stageGrid");root.innerHTML="";for(let s=1;s<=50;s++){const unlocked=stageUnlock(i,s),done=!!profile.completed[stageKey(i,s)],b=document.createElement("button");b.className="stage"+(unlocked?"":" locked")+(done?" done":"");b.disabled=!unlocked;b.innerHTML=`<b>${s}</b><small>${done?"★ "+profile.completed[stageKey(i,s)].stars+" ★":unlocked?"PLAY":"🔒"}</small>`;b.onclick=()=>startStage(i,s,false);root.appendChild(b)}showOnly("stageView")}
+function pickMode(w,s){return (w*7+s*3)%8}
+function difficultyFor(w,s){if(w<2)return s<20?"Beginner":"Elementary";if(w<6)return s<15?"Beginner":s<38?"Elementary":"Intermediate";if(w<12)return s<12?"Elementary":s<35?"Intermediate":"Advanced";return s<12?"Elementary":s<32?"Intermediate":"Advanced"}
+const qbank={
+present:[
+["She ___ to school every day.",["go","goes","going"],1,"She adalah orang ketiga tunggal, jadi kata kerja mendapat -s."],
+["They ___ football on Sundays.",["plays","play","playing"],1,"They memakai bentuk dasar play."],
+["My brother ___ coffee.",["don't like","doesn't like","isn't like"],1,"My brother = he, gunakan doesn't + verb dasar."],
+["___ your parents live here?",["Do","Does","Are"],0,"Parents berbentuk jamak, gunakan Do."],
+["Water ___ at 100°C.",["boil","boils","boiling"],1,"Fakta umum memakai Simple Present; water dianggap it."],
+["I usually ___ up at six.",["wakes","wake","waking"],1,"I memakai kata kerja dasar wake."],
+["Jenn ___ English every evening.",["study","studies","studying"],1,"Study berubah menjadi studies untuk she."],
+["He never ___ late.",["arrive","arrives","arriving"],1,"He + verb-s."],
+["We ___ near the beach.",["live","lives","living"],0,"We memakai live."],
+["The train ___ at 8 a.m.",["leave","leaves","leaving"],1,"Jadwal tetap dapat memakai Simple Present."]
+],
+continuous:[
+["Look! The baby ___.",["sleep","is sleeping","sleeps"],1,"Look! menunjukkan aksi sedang terjadi: is + verb-ing."],
+["I ___ English right now.",["am studying","study","studies"],0,"I memakai am + verb-ing."],
+["They ___ dinner at the moment.",["are having","have","has"],0,"They memakai are + verb-ing."],
+["Jenn ___ a book now.",["read","reads","is reading"],2,"Jenn = she, gunakan is reading."],
+["Why ___ you laughing?",["do","are","is"],1,"Pertanyaan present continuous: are + subject + verb-ing."]
+],
+past:[
+["We ___ Bali last year.",["visit","visited","visiting"],1,"Last year menunjukkan masa lalu; visit menjadi visited."],
+["She ___ me yesterday.",["called","calls","calling"],0,"Yesterday memakai Simple Past."],
+["They ___ not come last night.",["do","did","were"],1,"Negatif Simple Past memakai did not + verb dasar."],
+["___ you see the movie?",["Did","Do","Were"],0,"Pertanyaan Simple Past memakai Did."],
+["I ___ breakfast at 7 yesterday.",["have","had","having"],1,"Have adalah irregular verb; bentuk lampau had."]
+],
+future:[
+["I think it ___ tomorrow.",["rains","will rain","raining"],1,"Prediksi dapat memakai will + verb dasar."],
+["We ___ visit you next week.",["will","are","did"],0,"Will + base verb menyatakan masa depan."],
+["She is ___ to study tonight.",["go","going","will"],1,"Pola be going to + verb."],
+["Don't worry. I ___ help you.",["helped","will","am"],1,"Janji atau keputusan spontan: will help."]
+],
+perfect:[
+["I ___ finished my homework.",["has","have","am"],1,"I memakai have + V3."],
+["She has ___ to Japan.",["go","went","been"],2,"Present Perfect memakai have/has + past participle."],
+["They ___ lived here for five years.",["have","has","are"],0,"They memakai have."],
+["He ___ just arrived.",["have","has","is"],1,"He memakai has."]
+],
+modal:[
+["You ___ wear a seat belt.",["should","are","does"],0,"Should memberi saran atau kewajiban ringan."],
+["___ you help me, please?",["Could","Are","Did"],0,"Could adalah permintaan sopan."],
+["You ___ smoke here. It's prohibited.",["mustn't","don't have","could"],0,"Mustn't menyatakan larangan."],
+["She can ___ very well.",["sings","sing","singing"],1,"Modal diikuti kata kerja dasar."]
+],
+questions:[
+["___ she work here?",["Do","Does","Is"],1,"Does + she + base verb."],
+["Where ___ they live?",["does","do","are"],1,"They memakai do."],
+["He ___ like spicy food.",["don't","doesn't","isn't"],1,"He + doesn't + base verb."],
+["Are you ready? Yes, ___.",["I am","I do","I have"],0,"Jawaban pendek untuk are you adalah I am."]
+],
+vocab:[
+["Choose the closest meaning of 'reliable'.",["Easy to forget","Can be trusted","Very expensive"],1,"Reliable berarti dapat dipercaya."],
+["What does 'improve' mean?",["To make better","To make smaller","To stop"],0,"Improve berarti meningkatkan atau membuat lebih baik."],
+["Choose a synonym of 'excited'.",["Bored","Thrilled","Worried"],1,"Thrilled berarti sangat bersemangat."],
+["'Although' is closest to…",["Because","Even though","Therefore"],1,"Although berarti meskipun."]
+]
+};
+function bankFor(w){if(w<=1)return qbank.present.concat(qbank.continuous);if(w<=3)return qbank.perfect.concat(qbank.continuous);if(w<=4)return qbank.past;if(w<=7)return qbank.past.concat(qbank.perfect);if(w<=11)return qbank.future.concat(qbank.perfect);if(w===12)return qbank.modal;if(w===13)return qbank.questions.concat(qbank.present);if(w===14)return qbank.vocab;if(w===15)return qbank.vocab.concat(qbank.modal);if(w===16)return qbank.perfect.concat(qbank.past);if(w===17)return qbank.modal.concat(qbank.future);if(w===18)return qbank.questions.concat(qbank.perfect);return Object.values(qbank).flat()}
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+function makeQuestion(w,s,mode,index){
+ const bank=bankFor(w),q=bank[(s*7+index*3+Math.floor(Math.random()*bank.length))%bank.length];
+ if(mode===1){const correct=q[1][q[2]],words=correct.split(" ");const distract=shuffle(words);return {kind:"builder",prompt:"Susun kata berikut menjadi kalimat yang benar:",words:distr,answer:correct,explain:q[3]}}
+ if(mode===2){return {kind:"error",prompt:"Kalimat ini salah. Pilih perbaikan yang benar:",question:q[0],options:q[1],answer:q[2],explain:q[3]}}
+ if(mode===3){const v=qbank.vocab[index%qbank.vocab.length];return {kind:"quiz",prompt:v[0],options:v[1],answer:v[2],explain:v[3]}}
+ if(mode===4){const prompts=["You meet someone for the first time. What do you say?","Your partner says, 'I had a difficult day.' What is a kind response?","You want to order a cup of tea. What do you say?","Your friend asks about your weekend. Choose a natural reply.","You want to politely ask someone to repeat a sentence. What do you say?"];const opts=[["Nice to meet you.","I am sleep.","Where yesterday?"],["That's too bad. Do you want to talk about it?","You are wrong.","I don't care."],["I'd like a cup of tea, please.","Give tea now.","I tea want."],["It was relaxing. I stayed home.","I am weekend.","Weekend is yesterday?"],["Could you say that again, please?","Repeat you.","Again say."]];const i=(s+index)%prompts.length;return {kind:"quiz",prompt:prompts[i],options:opts[i],answer:0,explain:"Pilih ungkapan yang alami, sopan, dan sesuai konteks."}}
+ if(mode===5||mode===6){const prompts=mode===5?["Say one sentence about what you usually do in the morning.","Describe what you did yesterday in two sentences.","Tell your partner one thing you are looking forward to.","Make a kind sentence using 'because'.","Ask your partner one question in English."]:["Tell your partner three things you appreciate about them (in English).","Make a short plan for your next virtual date.","Describe your first impression of your partner in English.","Create a cute two-line message in English.","Ask your partner a thoughtful question in English."];return {kind:"speak",prompt:prompts[(s+index)%prompts.length],explain:"Ucapkan jawabanmu dalam bahasa Inggris. Pasangan memberi nilai: jelas, sesuai grammar, dan berani mencoba."}}
+ if(mode===7){const i=(s+index)%qbank.present.length;return {kind:"quiz",prompt:qbank.present[i][0],options:qbank.present[i][1],answer:qbank.present[i][2],explain:qbank.present[i][3]}}
+ return {kind:"quiz",prompt:q[0],options:q[1],answer:q[2],explain:q[3]}
+}
+function startStage(w,s,replay=false){
+ if(!stageUnlock(w,s)){alert("Selesaikan stage sebelumnya dulu untuk membuka stage ini.");return}
+ currentStage=s;selectedWorld=w;const mode=pickMode(w,s);play={w,s,mode,replay,questions:Array.from({length:5},(_,i)=>makeQuestion(w,s,mode,i)),index:0,correct:0,answered:false,streak:profile.streak||0};
+ $("stageTag").textContent=`WORLD ${w+1} · STAGE ${s}`;$("playTitle").textContent=modeNames[mode];$("modeLabel").textContent=modeIcons[mode]+" "+modeNames[mode];$("difficultyLabel").textContent=difficultyFor(w,s).toUpperCase();$("learnBox").classList.remove("hidden");$("learnBox").innerHTML=`<b>📘 Quick lesson</b><br>${worlds[w][0]} · <b>${worlds[w][3]}</b><br>${worlds[w][1]}<br><small>Kerjakan 5 tantangan. Target 3 bintang: minimal 5 jawaban/penilaian sempurna sesuai mode.</small>`;
+ showOnly("playView");renderQuestion();
+ // Notify room about selected shared activity; no answer data is written here.
+ if(roomId) update(roomPath(),{activeGame:{world:w,stage:s,mode:modeNames[mode],startedBy:uid,startedAt:Date.now(),status:"playing"}}).catch(()=>{});
+}
+function renderQuestion(){
+ const q=play.questions[play.index];play.answered=false;$("questionCount").textContent=(play.index+1)+" / 5";$("questionProgress").style.width=(play.index/5*100)+"%";$("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");$("finishBtn").classList.add("hidden");
+ const root=$("questionArea");root.innerHTML=`<div class="question">${q.prompt}</div>`;
+ if(q.kind==="builder"){const shuffled=shuffle(q.words);root.innerHTML+=`<div class="badge-row" id="wordTiles"></div><p class="hint">Ketik susunan kalimatmu di bawah (gunakan semua kata).</p><input id="freeAnswer" placeholder="Type your sentence here"><button id="checkFree" style="width:100%;margin-top:9px">Periksa jawaban</button>`;const tiles=$("wordTiles");shuffled.forEach(x=>{const s=document.createElement("span");s.className="pill";s.textContent=x;tiles.appendChild(s)});$("checkFree").onclick=()=>checkFree($("freeAnswer").value.trim(),q.answer,q.explain)}
+ else if(q.kind==="speak"){root.innerHTML+=`<textarea id="speakAnswer" rows="3" placeholder="Tulis jawabanmu di sini (opsional), lalu ucapkan lewat call..."></textarea><div class="row" style="margin-top:9px"><button id="selfGood" class="gold">✓ I tried it!</button><button id="askPartner" class="secondary">Pasangan sudah menilai</button></div><p class="hint">Penilaian jujur dan suportif: berani bicara, pesan jelas, grammar cukup tepat. Jangan mempermalukan pasangan karena salah.</p>`;$("selfGood").onclick=()=>markSpeak(true);$("askPartner").onclick=()=>markSpeak(true)}
+ else{const opts=q.options.map((o,i)=>`<button class="answer" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join("");root.innerHTML+=`<div class="answers">${opts}</div>`;root.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answer(Number(b.dataset.i),q))}
+}
+function showFeedback(ok,title,explain){const box=$("feedback");box.className="feedback "+(ok?"good":"bad");box.innerHTML=`<b>${ok?"✅ "+title:"💡 "+title}</b><br>${explain}`;box.classList.remove("hidden")}
+function answer(i,q){if(play.answered)return;play.answered=true;const ok=i===q.answer;if(ok){play.correct++;profile.totalCorrect++;profile.streak=(profile.streak||0)+1;profile.bestStreak=Math.max(profile.bestStreak||0,profile.streak)}else profile.streak=0;document.querySelectorAll(".answer").forEach((b,j)=>{b.disabled=true;if(j===q.answer)b.classList.add("correct");if(j===i&&!ok)b.classList.add("wrong")});showFeedback(ok,ok?"Correct!":"Not quite",q.explain);afterAnswer()}
+function checkFree(value,correct,explain){if(play.answered)return;play.answered=true;const norm=s=>s.toLowerCase().replace(/[.,!?]/g,"").replace(/\s+/g," ").trim();const ok=norm(value)===norm(correct);if(ok){play.correct++;profile.totalCorrect++;profile.streak=(profile.streak||0)+1;profile.bestStreak=Math.max(profile.bestStreak||0,profile.streak)}else profile.streak=0;showFeedback(ok,"Suggested answer: "+correct,explain);afterAnswer()}
+function markSpeak(ok){if(play.answered)return;play.answered=true;play.correct++;profile.totalCorrect++;profile.streak=(profile.streak||0)+1;profile.bestStreak=Math.max(profile.bestStreak||0,profile.streak);showFeedback(true,"Nice effort!","Speaking dinilai secara suportif oleh kalian sendiri. Fokus pada keberanian, kejelasan, dan perbaikan bertahap.");afterAnswer()}
+function afterAnswer(){if(play.index===4){$("finishBtn").classList.remove("hidden")}else{$("nextBtn").classList.remove("hidden")}}
+$("nextBtn").onclick=()=>{play.index++;renderQuestion()};
+async function completeStage(){
+ const stars=play.correct>=5?3:play.correct>=3?2:play.correct>=1?1:0;
+ const key=stageKey(play.w,play.s),old=profile.completed[key];
+ const gained=play.replay?Math.max(5,play.correct*2):play.correct*20+10;
+ if(!old||stars>(old.stars||0)){profile.completed[key]={stars:Math.max(stars,old?.stars||0),best:Math.max(play.correct,old?.best||0),played:(old?.played||0)+1}}
+ else if(old){old.played=(old.played||0)+1}
+ profile.xp=(profile.xp||0)+gained;profile.stars=Object.values(profile.completed).reduce((a,x)=>a+(x.stars||0),0);profile.totalPlayed=(profile.totalPlayed||0)+1;profile.level=Math.floor((profile.xp||0)/250)+1;
+ if(play.replay)profile.achievements.replay=true;
+ if(Object.keys(profile.completed).length>=1)profile.achievements.first=true;
+ if(Object.keys(profile.completed).length>=10)profile.achievements.ten=true;
+ if(Object.keys(profile.completed).length>=50)profile.achievements.fifty=true;
+ if(Object.keys(profile.completed).length>=100)profile.achievements.hundred=true;
+ if(stars===3)profile.achievements.perfect=true;
+ if(profile.bestStreak>=5)profile.achievements.streak5=true;
+ if(profile.bestStreak>=10)profile.achievements.streak10=true;
+ if(profile.xp>=1000)profile.achievements.xp1000=true;
+ if(new Date().getHours()>=20||new Date().getHours()<5)profile.achievements.night=true;
+ if(play.mode===6)profile.achievements.couple=true;
+ const done=Object.keys(profile.completed).length;
+ $("questionProgress").style.width="100%";$("questionArea").innerHTML=`<div class="question">Stage complete! ${"⭐".repeat(stars)||"Keep practicing!"}</div><p>Kamu menjawab/menyelesaikan ${play.correct} dari 5 tantangan.</p><div class="stats"><div class="stat"><b>+${gained}</b><small>XP gained</small></div><div class="stat"><b>${stars}/3</b><small>Stars</small></div><div class="stat"><b>${done}</b><small>Stages cleared</small></div><div class="stat"><b>${profile.level}</b><small>New level</small></div></div><p class="hint">Stage ini bisa dimainkan lagi kapan saja. Coba ulang untuk memperbaiki bintang dan menguatkan materi.</p>`;
+ $("feedback").classList.add("hidden");$("nextBtn").classList.add("hidden");$("finishBtn").classList.add("hidden");
+ await saveProfile();await syncRoomScore(gained,stars);renderStats();renderWorlds();
+ $("finishBtn").classList.add("hidden");$("questionCount").textContent="COMPLETE";
+ const again=document.createElement("button");again.className="gold";again.textContent="🔁 Mainkan ulang";again.onclick=()=>startStage(play.w,play.s,true);$("questionArea").appendChild(again);
+ const map=document.createElement("button");map.className="secondary";map.textContent="🗺️ Kembali ke map";map.style.marginTop="8px";map.style.width="100%";map.onclick=()=>openWorld(play.w);$("questionArea").appendChild(map);
+}
+$("finishBtn").onclick=completeStage;
+$("exitPlay").onclick=()=>openWorld(selectedWorld);
+$("backWorld").onclick=()=>{showOnly("mapView");renderWorlds()};
+function renderStats(){$("xp").textContent=profile.xp||0;$("level").textContent=profile.level||1;$("stars").textContent=profile.stars||0;$("streak").textContent=profile.bestStreak||0}
+async function saveProfile(){if(uid)await set(myProfilePath(),{...profile,name:$("playerName").value.trim()||"Player",updatedAt:Date.now()})}
+async function syncRoomScore(xp,stars){if(!roomId)return;const scores={};scores[slot]={name:$("playerName").value.trim()||"Player",xp:profile.xp,stars:profile.stars,completed:Object.keys(profile.completed).length};await update(roomPath(),{["scores/"+slot]:scores[slot],lastResult:{by:uid,xp,stars,at:Date.now()}}).catch(()=>{})}
+function renderAchievements(){const root=$("achievementGrid");root.innerHTML="";achievements.forEach(a=>{const unlocked=!!profile.achievements[a[0]],el=document.createElement("div");el.className="achievement"+(unlocked?" unlocked":"");el.innerHTML=`<b>${a[1]} ${unlocked?"✓":"🔒"}</b><small>${a[2]}</small>`;root.appendChild(el)});showOnly("achievementView")}
+function renderProfile(){const mine=Object.keys(profile.completed||{}).length;const partners=roomState?.scores||{};$("profileContent").innerHTML=`<div class="stats"><div class="stat"><b>${mine}</b><small>Stage selesai</small></div><div class="stat"><b>${profile.totalCorrect||0}</b><small>Jawaban benar / usaha</small></div><div class="stat"><b>${profile.bestStreak||0}</b><small>Best streak</small></div><div class="stat"><b>${Object.values(profile.achievements||{}).filter(Boolean).length}</b><small>Achievement</small></div></div><h3 style="margin-top:18px">🏅 Room leaderboard</h3><div class="achievement-grid">${[0,1].map(i=>{const p=partners[i]||{};return `<div class="achievement"><b>${p.name||"Waiting player"}</b><small>${p.xp||0} XP · ${p.stars||0} stars · ${p.completed||0} stages</small></div>`}).join("")}</div><p class="hint">Progress pribadi disimpan pada profil Firebase berdasarkan akun anonim perangkat. Gunakan perangkat dan browser yang sama agar progress tetap terhubung.</p>`;showOnly("profileView")}
+$("homeBtn").onclick=()=>{showOnly("mapView");renderWorlds()};$("achBtn").onclick=renderAchievements;$("profileBtn").onclick=renderProfile;$("backAch").onclick=()=>showOnly("mapView");$("backProfile").onclick=()=>showOnly("mapView");
+
+async function connect(){
+ try{const cfg=JSON.parse($("firebaseConfig").value);const appName="english-adventure";try{app=initializeApp(cfg,appName)}catch(e){app=initializeApp(cfg,appName+"-"+Date.now())}const auth=getAuth(app);db=getDatabase(app);await signInAnonymously(auth);uid=auth.currentUser.uid;
+ const snap=await get(ref(db,"englishAdventureProfiles/"+uid));if(snap.exists())profile={...profile,...snap.val()};
+ $("roomBox").classList.remove("hidden");$("connectBtn").classList.add("hidden");say("Terhubung. Buat room baru atau gabung dengan Jenn.");$("welcomeName").textContent=$("playerName").value.trim()||"Player";renderStats();
+ }catch(e){say("Gagal terhubung: "+e.message+". Periksa koneksi Firebase dan Database Rules.")}
+}
+$("connectBtn").onclick=connect;
+async function createRoom(){try{roomId=randCode();slot=0;const name=$("playerName").value.trim()||"Jason";await set(roomPath(),{createdAt:Date.now(),players:[{uid,name},{uid:"",name:"Jenn"}],scores:[{name,xp:profile.xp||0,stars:profile.stars||0,completed:Object.keys(profile.completed||{}).length},null],status:"waiting",activeGame:null});await enterRoom()}catch(e){say("Gagal membuat room: "+e.message)}}
+async function joinRoom(){try{roomId=$("joinCode").value.trim().toUpperCase();if(!roomId)throw Error("Masukkan kode room.");const snap=await get(roomPath());if(!snap.exists())throw Error("Room tidak ditemukan.");const s=snap.val();if(s.players?.[0]?.uid===uid)slot=0;else if(s.players?.[1]?.uid===uid)slot=1;else if(!s.players?.[1]?.uid){slot=1;await update(roomPath(),{"players/1/uid":uid,"players/1/name":$("playerName").value.trim()||"Jenn"})}else throw Error("Room sudah penuh.");await enterRoom()}catch(e){say(e.message)}}
+async function enterRoom(){
+ $("setup").classList.add("hidden");$("app").classList.remove("hidden");$("roomLabel").textContent="ROOM "+roomId;showOnly("mapView");renderWorlds();
+ if(roomUnsub)roomUnsub();roomUnsub=onValue(roomPath(),snap=>{if(!snap.exists())return;roomState=snap.val();const count=(roomState.players||[]).filter(p=>p?.uid).length;$("onlineLabel").textContent=count===2?"💚 2 players online":"⏳ Menunggu pemain kedua";$("turnHint").textContent=roomState.activeGame?`Sedang bermain: ${roomState.activeGame.mode} · World ${roomState.activeGame.world+1}, Stage ${roomState.activeGame.stage}`:"Pilih world dan stage untuk mulai";});
+ await saveProfile();say("Room "+roomId+" siap. Bagikan kode ini ke pasangan.");
+}
+$("createBtn").onclick=createRoom;$("joinBtn").onclick=joinRoom;
+</script>
+</body></html>
